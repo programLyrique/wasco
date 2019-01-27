@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Partition</title>
+    <style>      
+     @keyframes anim {
+		 0%   {
+			transform: translateX(0px);
+		 }
+		 100% {
+			transform : translate(520px);
+		 }
+	   }  
+	  #line{
+			animation: anim 20s linear;
+      }
+    </style>
+</head>
+<body>
+    <div>
+    	<svg id="graph" width="800" height="700" version="1.1" xmlns="http://www.w3.org/2000/svg">
+			<line x1="0" x2="0" y1="0" y2="320" style="stroke:rgb(255,0,0);"/>
+			<line x1="0" x2="520" y1="320" y2="320" style="stroke:rgb(255,0,0);"/>
+			<line id="line" x1="0" x2="0" y1="0" y2="320" stroke-dasharray="4" style="stroke:rgb(0,0,0);"/>
+		</svg>
+    </div>
+
+<script type="text/javascript" src="graphic_V3.js"></script>
+</body>
+
+
+</html>

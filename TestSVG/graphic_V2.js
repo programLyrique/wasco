@@ -20,7 +20,7 @@ for(var i = 0;i<notes.length;i++){
 	Object.keys(notes[i]).forEach(function(elt){
 		if(note_hauteur[elt[0]] != undefined ){
 			
-			var str = '<rect x="'+sumWidth+'" y="'+note_hauteur[elt[0]][0]+'"'+
+			var str = '<rect rx="5" ry="5" x="'+sumWidth+'" y="'+note_hauteur[elt[0]][0]+'"'+
 			 			'width="'+
 			 			Object.values(notes[i])[0] * tempo+'" height="20"'+
 			 			'style="fill:'+note_hauteur[elt[0]][1]+';stroke:black;stroke-width:1" />'
@@ -32,7 +32,7 @@ for(var i = 0;i<notes.length;i++){
 
 			var str = '<rect x="'+sumWidth+'" y="0"'+
 			 			'width="'+
-			 			Object.values(notes[i])[0] * tempo +'" height="320"'+
+			 			Object.values(notes[i])[0] * tempo+'" height="320"'+
 			 			'style="fill:white;stroke:black;stroke-width:0.5" />'
 
 			sumWidth+= Object.values(notes[i])[0] * tempo
@@ -44,15 +44,14 @@ for(var i = 0;i<notes.length;i++){
 graph = '<svg width="800" height="800" version="1.1" xmlns="http://www.w3.org/2000/svg">'+
 			'<line x1="0" x2="0" y1="0" y2="320" style="stroke:rgb(255,0,0);"/>'+
 			'<line x1="0" x2="520" y1="320" y2="320" style="stroke:rgb(255,0,0);"/>'+
-			'<line x1="0" x2="0" y1="0" y2="320" stroke-dasharray="4" style="stroke:rgb(0,0,0);">'+
-			'<animate attributeType="HTML"  attributeName="x1" from="0" to="520"'+
-            'dur="2s" repeatCount="indefinite"/>'+
-            '<animate attributeType="HTML"  attributeName="x2" from="0" to="520"'+
-            'dur="2s" repeatCount="indefinite"/>'+
-            '</line>'+
+			'<line id="line" x1="0" x2="0" y1="0" y2="320" stroke-dasharray="4" style="stroke:rgb(0,0,0);"/>'+
 			rectNotes+
 		'</svg>'
 
 document.getElementById("graph").innerHTML = graph;
-
+var i = 0;
+setInterval(function(){
+i++;
+document.getElementById("line").setAttribute('x1',i);
+document.getElementById("line").setAttribute('x2',i); }, 50)
 })()

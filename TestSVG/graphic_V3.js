@@ -8,7 +8,10 @@ var notes = [
 	{"G4": 0.0},
 	{"F4": 2.0}
 ]
+  // <rect x="50" y="20" rx="20" ry="20" width="150" height="150"
+  // style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />
 
+//var note_hauteur = {"C":500,"D":450,"E":400,"F":350,"G":300,"A":250,"B":200}
 var note_hauteur = {"C":[300,"#bd0e0e"],"D":[250,"#d44223"],"E":[200,"#1aa4d6"],"F":[150,"#11b085"],"G":[100,"#264a57"],"A":[50,"#272143"],"B":[0,"#13bd0e"]}
 var tempo = 60;
 var graph;
@@ -32,7 +35,7 @@ for(var i = 0;i<notes.length;i++){
 
 			var str = '<rect x="'+sumWidth+'" y="0"'+
 			 			'width="'+
-			 			Object.values(notes[i])[0] * tempo +'" height="320"'+
+			 			Object.values(notes[i])[0] * tempo+'" height="320"'+
 			 			'style="fill:white;stroke:black;stroke-width:0.5" />'
 
 			sumWidth+= Object.values(notes[i])[0] * tempo
@@ -41,18 +44,6 @@ for(var i = 0;i<notes.length;i++){
 	})
 }
 
-graph = '<svg width="800" height="800" version="1.1" xmlns="http://www.w3.org/2000/svg">'+
-			'<line x1="0" x2="0" y1="0" y2="320" style="stroke:rgb(255,0,0);"/>'+
-			'<line x1="0" x2="520" y1="320" y2="320" style="stroke:rgb(255,0,0);"/>'+
-			'<line x1="0" x2="0" y1="0" y2="320" stroke-dasharray="4" style="stroke:rgb(0,0,0);">'+
-			'<animate attributeType="HTML"  attributeName="x1" from="0" to="520"'+
-            'dur="2s" repeatCount="indefinite"/>'+
-            '<animate attributeType="HTML"  attributeName="x2" from="0" to="520"'+
-            'dur="2s" repeatCount="indefinite"/>'+
-            '</line>'+
-			rectNotes+
-		'</svg>'
-
-document.getElementById("graph").innerHTML = graph;
+document.getElementById("graph").insertAdjacentHTML("afterbegin",rectNotes);
 
 })()
