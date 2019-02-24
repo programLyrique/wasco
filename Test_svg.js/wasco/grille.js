@@ -142,24 +142,25 @@ function run(partition, durationArray) {
                 tmp.push(lignes[i])
             }
         }
-        ligneActive = tmp[tmp.length - 1]
+        if (tmp.length>0) {
+            ligneActive = tmp[tmp.length - 1]
+        }else{
+            ligneActive = lignes[0]
+        }
+        
         
         i = 0
         index = 0
         while (i<timeLineTab.length) {
             l = document.getElementById(timeLineTab[i].line.id())
-            console.log(timeLineTab[i].line.id())
             if (l.getAttribute("x1") == ligneActive.getAttribute("x1")) {
-                console.log("i : "+i)
                 index = i
             }
             document.getElementsByTagName("svg")[0].removeChild(l)
             i++;
         }
-        console.log("---------------------")
-        console.log(timeLineTab[0])
-        i = index
-        var attente = 0.0
+        i = index + 1
+        attente = 0.0
         
         while (i<timeLineTab.length) {
             var realDuration = durationArray[i%durationArray.length]
@@ -176,7 +177,9 @@ function run(partition, durationArray) {
                             })
             
             newTimeLineTab.push({line : newLigne, x_init : timeLineTab[i].x_init, x_end : timeLineTab[i].x_end})
+            
             attente += realDuration
+            
             i++
         }
         
