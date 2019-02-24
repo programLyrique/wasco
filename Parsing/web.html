@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="peg.js"></script>
+    <script src="parser.js"></script>
+</head>
+
+<body>
+    <h1>Parsing</h1>
+    <input type="file" name="file" id="file"></br></br>
+    <button id="create">Create file</button><br><br>
+    <a download="parsed.prt" id="download" style="display: none; text-decoration: none;">Save</a>
+</body>
+<script>
+(function() {
+
+    var _parser;
+    var partition;
+    var regex = /^(BPM|NOTE|CHORD|TRILL|MULTI)+/y;
+    document.getElementById('file').onchange = function() {
+        partition = [];
+        var file = this.files[0];
+
+        var reader = new FileReader();
+        reader.onload = function(progressEvent) {
+
+            // line by line
+            var lines = this.result.split('\n');
+            for (var i = 0; i < lines.length; i++) {
+                if (!regex.test(lines[i]))
+                    continue;
+                // if(!parser.parse(lines[i]).bpm)
+                // 	if(parser.parse(lines[i])[0].trill)
+                // console.log(lines[i]);
+                // console.log(parser.parse(lines[i]));
+                partition.push(parser.parse(lines[i]));
+            }
+        };
+        reader.readAsText(file);
+        var textFile = null;
+        makeTextFile = function(text) {
+            var data = new Blob([text], { type: 'text/plain' });
+
+            // If we are replacing a previously generated file we need to
+            // manually revoke the object URL to avoid memory leaks.
+            if (textFile !== null) {
+                window.URL.revokeObjectURL(textFile);
+            }
+
+            textFile = window.URL.createObjectURL(data);
+
+            return textFile;
+        };
+
+
+        var create = document.getElementById('create');
+
+        create.addEventListener('click', function() {
+            var link = document.getElementById('download');
+            link.href = makeTextFile(JSON.stringify(partition) == undefined ? "Error : you have to generate parsed partion first !" : JSON.stringify(partition));
+            link.style.display = 'block';
+        }, false);
+        // console.log(partition);
+    };
+})();
+</script>
+
+</html>

@@ -1,0 +1,120 @@
+start
+ = s:( STATEMENT / BPM ) {return s;}
+
+BPM
+ = "BPM" _ b:(decimal / int) _ attr? {return { bpm : parseFloat(b) };}
+
+STATEMENT
+ = e:event _ d:duration _ a:attr?
+  { if (a !== "") {
+      return [e,{duration :d}, {event_label : a}];
+    }else {
+      return [e,{duration :d}];
+    }
+}
+event
+ =  e:(note / chord / trill / multi / _event) {return e;}
+
+pitch
+ = pred? _ p:(midi / std_pitch) _ {return p;}
+
+pred 
+ = "-" {return "";}
+
+pitch_letter
+ =  _ p:[ A-G ] _ {return p;}
+
+alter
+ = s:("##" / "#" / "x" / "bb" / "b") {
+  switch (s) {
+  case "#":
+    return 1;
+    break;
+  case "##":
+    return 2;
+    break;
+  case "x":
+    return 2;
+    break;
+  case "bb":
+    return -1;
+    break;
+  case "b":
+    return -2;
+    break;
+    }
+ }
+ 
+std_pitch
+ = p:pitch_letter a:alter? i:int {
+ 
+  var ord = function (str) {return str.charCodeAt(0);}
+  var semitones = [ 0, 2, 4, 5, 7, 9, 11 ];
+    var letter2int = function (letter) {return (ord(letter) - ord('A') + 5) %  7;}
+
+  var toMidi = function (letter, alter, octave){
+      return semitones[letter2int(letter)] + alter + 12 * (octave + 1)
+    }
+    return toMidi(p,a,i);
+ }
+
+midi 
+  = p:int { 
+   if (parseInt(text()) > 128) {return (parseInt(text()/100));}
+   else {return parseInt(text());}
+  }
+
+attr 
+  = comment / ident / int / decimal
+ 
+ comment
+  = ";" id:ident {return id;}
+
+ident 
+ = id:(.)* {return id.join('');}
+
+note
+ = "NOTE" p:pitch { return { note : p};}
+
+chord
+ =  "CHORD" _ "(" c:pitch+ ")" _ {return {chord : c, nb : c.length};}
+
+innerc
+ = _ "(" p:pitch+ ")" _ {return {chord : p};}
+
+trill 
+ = "TRILL" _ "("  t:(innerc/pitch)+  ")" {
+  return {trill : t, nb : t.length}
+ }
+ 
+ trill_multi
+  = innerc "'"
+ 
+ innercm
+  = _ "(" p:pitch+ ")" _ {return p;}
+ 
+innerm
+ = pitch / innercm / trill_multi
+ 
+ multi
+  = "MULTI" _ "(" a:innerm+ "->" b:innerm+ ")" {
+    return {multi : a.concat(b), nb: a.concat(b).length};
+  }
+
+_event
+ = "EVENT" _ e:int { return {event : e};}
+
+duration 
+ = d:(fraction / decimal / int) {return d;}
+
+int 
+ = i:[0-9]+ {return  parseInt(text());}
+
+decimal
+ = i:int "." j:int { return parseFloat(text()); }
+ 
+fraction
+ = i:int "/" j:int { return parseFloat(eval(text()).toFixed(3)); }
+  
+_ "whitespace"
+  = [ \t\n\r\s ]*
