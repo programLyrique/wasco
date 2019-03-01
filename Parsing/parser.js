@@ -144,7 +144,7 @@ window.parser = /*
         peg$c0 = function(s) {return s;},
         peg$c1 = "BPM",
         peg$c2 = peg$literalExpectation("BPM", false),
-        peg$c3 = function(b) {return { bpm : parseFloat(b) };},
+        peg$c3 = function(b) {return [{ BPM : parseFloat(b) } ];},
         peg$c4 = function(e, d, a) { if (a !== "") {
               return [e,{duration :d}, {event_label : a}];
             }else {
@@ -209,19 +209,19 @@ window.parser = /*
         peg$c29 = function(id) {return id.join('');},
         peg$c30 = "NOTE",
         peg$c31 = peg$literalExpectation("NOTE", false),
-        peg$c32 = function(p) { return { note : p};},
+        peg$c32 = function(p) { return { NOTE : p};},
         peg$c33 = "CHORD",
         peg$c34 = peg$literalExpectation("CHORD", false),
         peg$c35 = "(",
         peg$c36 = peg$literalExpectation("(", false),
         peg$c37 = ")",
         peg$c38 = peg$literalExpectation(")", false),
-        peg$c39 = function(c) {return {chord : c, nb : c.length};},
-        peg$c40 = function(p) {return {chord : p};},
+        peg$c39 = function(c) {return {CHORD : c, nb : c.length};},
+        peg$c40 = function(p) {return {CHORD : p};},
         peg$c41 = "TRILL",
         peg$c42 = peg$literalExpectation("TRILL", false),
         peg$c43 = function(t) {
-          return {trill : t, nb : t.length}
+          return {TRILL : t, nb : t.length}
          },
         peg$c44 = "'",
         peg$c45 = peg$literalExpectation("'", false),
@@ -230,11 +230,11 @@ window.parser = /*
         peg$c48 = "->",
         peg$c49 = peg$literalExpectation("->", false),
         peg$c50 = function(a, b) {
-            return {multi : a.concat(b), nb: a.concat(b).length};
+            return {MULTI : a.concat(b), nb: a.concat(b).length};
           },
         peg$c51 = "EVENT",
         peg$c52 = peg$literalExpectation("EVENT", false),
-        peg$c53 = function(e) { return {event : e};},
+        peg$c53 = function(e) { return {EVENT : e};},
         peg$c54 = function(d) {return d;},
         peg$c55 = /^[0-9]/,
         peg$c56 = peg$classExpectation([["0", "9"]], false, false),
@@ -246,8 +246,8 @@ window.parser = /*
         peg$c62 = peg$literalExpectation("/", false),
         peg$c63 = function(i, j) { return parseFloat(eval(text()).toFixed(3)); },
         peg$c64 = peg$otherExpectation("whitespace"),
-        peg$c65 = /^[ \t\n\r ]/,
-        peg$c66 = peg$classExpectation([" ", "\t", "\n", "\r", " "], false, false),
+        peg$c65 = /^[ \t\n\rs ]/,
+        peg$c66 = peg$classExpectation([" ", "\t", "\n", "\r", "s", " "], false, false),
 
         peg$currPos          = 0,
         peg$savedPos         = 0,

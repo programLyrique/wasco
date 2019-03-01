@@ -2,7 +2,7 @@ start
  = s:( STATEMENT / BPM ) {return s;}
 
 BPM
- = "BPM" _ b:(decimal / int) _ attr? {return { bpm : parseFloat(b) };}
+ = "BPM" _ b:(decimal / int) _ attr? {return [{ BPM : parseFloat(b) } ];}
 
 STATEMENT
  = e:event _ d:duration _ a:attr?
@@ -74,17 +74,17 @@ ident
  = id:(.)* {return id.join('');}
 
 note
- = "NOTE" p:pitch { return { note : p};}
+ = "NOTE" p:pitch { return { NOTE : p};}
 
 chord
- =  "CHORD" _ "(" c:pitch+ ")" _ {return {chord : c, nb : c.length};}
+ =  "CHORD" _ "(" c:pitch+ ")" _ {return {CHORD : c, nb : c.length};}
 
 innerc
- = _ "(" p:pitch+ ")" _ {return {chord : p};}
+ = _ "(" p:pitch+ ")" _ {return {CHORD : p};}
 
 trill 
  = "TRILL" _ "("  t:(innerc/pitch)+  ")" {
-  return {trill : t, nb : t.length}
+  return {TRILL : t, nb : t.length}
  }
  
  trill_multi
@@ -98,11 +98,11 @@ innerm
  
  multi
   = "MULTI" _ "(" a:innerm+ "->" b:innerm+ ")" {
-    return {multi : a.concat(b), nb: a.concat(b).length};
+    return {MULTI : a.concat(b), nb: a.concat(b).length};
   }
 
 _event
- = "EVENT" _ e:int { return {event : e};}
+ = "EVENT" _ e:int { return {EVENT : e};}
 
 duration 
  = d:(fraction / decimal / int) {return d;}
