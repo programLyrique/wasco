@@ -4,6 +4,20 @@
 	<meta charset="UTF-8">
 	<script src="svg.js" defer></script>
     <script src="grille.js" defer ></script>
+    <style>
+    	
+    #drawing{
+    	position: absolute;
+    	transition-property: left;
+  		transition-duration: 20s;
+    }
+
+    @keyframes slidein {
+    	0% { left : 0px;}
+    	100% {left : -1000px;}
+    }
+
+    </style>
 </head>
 <body>
 	<input type="file" id="file-input" />

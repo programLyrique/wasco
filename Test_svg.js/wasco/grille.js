@@ -46,10 +46,10 @@ function dichotomie(timeLine, tab) {
 
     if (tab.length == 1) {
 
-        if (timeLine >= tab[0].x_init && timeLine < tab[0].x_end) {
+        if (timeLine >= tab[0].x_init && timeLine <= tab[0].x_end) {
 
             console.log("Note found !!")
-            return SVG.get(tab[0].x_init)
+            return tab[0]
 
         } else {
 
@@ -73,6 +73,8 @@ function dichotomie(timeLine, tab) {
 document.getElementById('file-input').addEventListener('change', readSingleFile, false)
 
 document.getElementById('real_duration').addEventListener('change', readDurationFile, false)
+
+    var rectPositionTab = []
 
 function run(partition, durationArray) {
 
@@ -101,6 +103,7 @@ function run(partition, durationArray) {
     var heightNote = 30
 
     var draw = SVG('drawing').size(width, height)
+
     var xLine = draw.line(50, 0, 50, height).stroke({
         width: 1
     }).id('xLine')
@@ -152,17 +155,43 @@ function run(partition, durationArray) {
     }
 
     var sommeNoteDuration = 100
-    var rectPositionTab = []
 
     var intervalID = window.addEventListener("click", function () { // Simulate Event
 
-        console.log("timeline :: " + timeLine.attr('x1'))
         var timeL = timeLine.attr('x1')
-        console.log("tileLne Tb : " + rectPositionTab.length)
         var currentNote = dichotomie(timeL, rectPositionTab)
         console.log(currentNote)
-        timeLine.pause()
+        var indexCurr = rectPositionTab.indexOf(currentNote)
+        var next
+        if(currentNote.x_init == currentNote.x_end){
+            next = rectPositionTab[indexCurr + 1]
+        }else if(timeL == currentNote.x_init){
+            next = rectPositionTab[indexCurr]
+        }else if(timeL <= currentNote.x_end){
+            next = rectPositionTab[indexCurr + 1]
+        }
+        
+        
+        now = Date.now()
 
+        timer = durationArray[0]
+
+        if(timer < now - start){
+            timeLine.stop()
+            timeLine.remove()
+            timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
+                width: 1
+            })
+            timeLine.animate(next.duree_note * 1000, '-', 0).attr({
+                x1: next.x_end,
+                x2: next.x_end
+            })
+        }else if(timer > now - start){
+
+        }else{
+
+        }
+        
     })
 
     for (var i = 1; i < partition.length - 1; i++) {
@@ -302,13 +331,17 @@ function run(partition, durationArray) {
         }
     }
 
-    // Cursor
+    s = 0;
+
+    var start = Date.now();
+    
     var timeLine = draw.line(100, 0, 100, height).stroke({
         width: 1
     }).id('timeLine')
-    timeLine.animate(duration * 1000, '-', 0).attr({
-        x1: width,
-        x2: width
+
+    timeLine.animate(rectPositionTab[0].duree_note * 1000, '-', 0).attr({
+        x1: rectPositionTab[0].x_end,
+        x2: rectPositionTab[0].x_end
     })
 
     //scrollTo(0, document.getElementById("timeLine").getAttribute("x"))
