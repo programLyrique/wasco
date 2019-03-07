@@ -1,29 +1,26 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<script src="svg.js" defer></script>
-    <script src="grille.js" defer ></script>
-    <style>
-    	
-    #drawing{
-    	position: absolute;
-    	transition-property: left;
-  		transition-duration: 20s;
-    }
+	<script src="grille.js" defer></script>
+	<style>
 
-    @keyframes slidein {
-    	0% { left : 0px;}
-    	100% {left : -1000px;}
-    }
+		svg g {
+		overflow: hidden;
+	}
 
     </style>
 </head>
+
 <body>
 	<input type="file" id="file-input" />
 	<input type="file" id="real_duration" />
 	<h3>Contents of the file:</h3>
 	<pre id="file-content"></pre>
+	<div id="pianoroll"></div>
 	<div id="drawing"></div>
 </body>
+
 </html>

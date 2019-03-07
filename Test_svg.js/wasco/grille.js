@@ -102,14 +102,10 @@ function run(partition, durationArray) {
     var widthNote = 80
     var heightNote = 30
 
-    var draw = SVG('drawing').size(width, height)
-
-    var xLine = draw.line(50, 0, 50, height).stroke({
-        width: 1
-    }).id('xLine')
-    var yLine = draw.line(50, height, width, height).stroke({
-        width: 1
-    }).id('yLine')
+    var upper = SVG('drawing').size(width, height)
+    var pianoroll = upper.group()
+    var wall = upper.nested()
+    var draw = wall.group()
 
     var note = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -127,8 +123,8 @@ function run(partition, durationArray) {
     var midiMatrixValues = Object.values(midiMatrix)
     var revMidiMatrix = midiMatrixValues.reverse()
 
-    // pianoroll 
-    for (var i = 0; i < height; i++) {
+    // pianoroll
+    for (let i = 0; i < height; i++) {
 
         if ((i + 12) % revMidiMatrix.length == 0)
             break
@@ -136,17 +132,17 @@ function run(partition, durationArray) {
         var key = revMidiMatrix[i + 12 % revMidiMatrix.length]
 
         if (key.length > 2) {
-            var keyB = draw.rect(100, 30).move(0, i * 30).fill('black').id(key)
-            var rectPaire = draw.rect(width, 30).move(100, i * 30).fill('#e5e5e5')
-            var text = draw.text(key)
+            var keyB = pianoroll.rect(100, 30).move(0, i * 30).fill('black').id(key)
+            var rectPaire = pianoroll.rect(width, 30).move(100, i * 30).fill('#e5e5e5')
+            var text = pianoroll.text(key)
             text.move(40, i * 30).font({
                 fill: '#fff',
                 family: 'Arial'
             })
         } else {
-            var keyW = draw.rect(100, 30).move(0, i * 30).fill('#e1e1e1').id(key)
-            var rectImpaire = draw.rect(width, 30).move(100, i * 30).fill('#f5f2d5')
-            var text = draw.text(key)
+            var keyW = pianoroll.rect(100, 30).move(0, i * 30).fill('#e1e1e1').id(key)
+            var rectImpaire = pianoroll.rect(width, 30).move(100, i * 30).fill('#f5f2d5')
+            var text = pianoroll.text(key)
             text.move(40, i * 30).font({
                 fill: '#000',
                 family: 'Arial'
@@ -171,6 +167,7 @@ function run(partition, durationArray) {
             next = rectPositionTab[indexCurr + 1]
         }
         
+        draw.animate(30000, '-', 0).move(-300,0)
         
         now = Date.now()
 
@@ -331,7 +328,29 @@ function run(partition, durationArray) {
         }
     }
 
-    s = 0;
+    for (let i = 0; i < height; i++) {
+
+        if ((i + 12) % revMidiMatrix.length == 0)
+            break
+
+        var key = revMidiMatrix[i + 12 % revMidiMatrix.length]
+
+        if (key.length > 2) {
+            var keyB = pianoroll.rect(100, 30).move(0, i * 30).fill('black').id(key)
+            var text = pianoroll.text(key)
+            text.move(40, i * 30).font({
+                fill: '#fff',
+                family: 'Arial'
+            })
+        } else {
+            var keyW = pianoroll.rect(100, 30).move(0, i * 30).fill('#e1e1e1').id(key)
+            var text = pianoroll.text(key)
+            text.move(40, i * 30).font({
+                fill: '#000',
+                family: 'Arial'
+            })
+        }
+    }
 
     var start = Date.now();
     
@@ -339,12 +358,11 @@ function run(partition, durationArray) {
         width: 1
     }).id('timeLine')
 
-    timeLine.animate(rectPositionTab[0].duree_note * 1000, '-', 0).attr({
+    timeLine.animate(rectPositionTab[0].duree_note * 1000, '-', 1000).attr({
         x1: rectPositionTab[0].x_end,
         x2: rectPositionTab[0].x_end
     })
 
-    //scrollTo(0, document.getElementById("timeLine").getAttribute("x"))
     scrollTo(0, document.getElementById("F#5").getAttribute("y"))
 
 }
