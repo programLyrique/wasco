@@ -48,7 +48,7 @@ function dichotomie(timeLine, tab) {
 
         if (timeLine >= tab[0].x_init && timeLine <= tab[0].x_end) {
 
-            console.log("Note found !!")
+            //console.log("Note found !!")
             return tab[0]
 
         } else {
@@ -107,6 +107,8 @@ function run(partition, durationArray) {
     var wall = upper.nested()
     var draw = wall.group()
 
+    pianoroll.front()
+
     var note = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
     var midiMatrix = {}
@@ -133,7 +135,7 @@ function run(partition, durationArray) {
 
         if (key.length > 2) {
             var keyB = pianoroll.rect(100, 30).move(0, i * 30).fill('black').id(key)
-            var rectPaire = pianoroll.rect(width, 30).move(100, i * 30).fill('#e5e5e5')
+            var rectPaire = draw.rect(width, 30).move(100, i * 30).fill('#e5e5e5')
             var text = pianoroll.text(key)
             text.move(40, i * 30).font({
                 fill: '#fff',
@@ -141,7 +143,7 @@ function run(partition, durationArray) {
             })
         } else {
             var keyW = pianoroll.rect(100, 30).move(0, i * 30).fill('#e1e1e1').id(key)
-            var rectImpaire = pianoroll.rect(width, 30).move(100, i * 30).fill('#f5f2d5')
+            var rectImpaire = draw.rect(width, 30).move(100, i * 30).fill('#f5f2d5')
             var text = pianoroll.text(key)
             text.move(40, i * 30).font({
                 fill: '#000',
@@ -151,12 +153,26 @@ function run(partition, durationArray) {
     }
 
     var sommeNoteDuration = 100
+    var halfWindow = window.innerWidth/2
 
     var intervalID = window.addEventListener("click", function () { // Simulate Event
+        
 
+        //console.log(halfWindow)
         var timeL = timeLine.attr('x1')
+
+        //console.log(timeL)
+
+        if(timeL > halfWindow){
+            console.log(timeL)
+            console.log(halfWindow)
+            draw.animate(3000, '-', 0).move(-halfWindow+90,0)
+            halfWindow += window.innerWidth / 2
+            console.log(halfWindow)
+
+        }
+
         var currentNote = dichotomie(timeL, rectPositionTab)
-        console.log(currentNote)
         var indexCurr = rectPositionTab.indexOf(currentNote)
         var next
         if(currentNote.x_init == currentNote.x_end){
@@ -167,13 +183,12 @@ function run(partition, durationArray) {
             next = rectPositionTab[indexCurr + 1]
         }
         
-        draw.animate(30000, '-', 0).move(-300,0)
+        
         
         now = Date.now()
-
+        //timer = durationArray[Math.floor(Math.random() * Math.floor(durationArray.length - 1))]
         timer = durationArray[0]
-
-        if(timer < now - start){
+        if(timer <= now - start){
             timeLine.stop()
             timeLine.remove()
             timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
@@ -183,10 +198,20 @@ function run(partition, durationArray) {
                 x1: next.x_end,
                 x2: next.x_end
             })
-        }else if(timer > now - start){
-
-        }else{
-
+        }else {  //if(timer > now - start)
+            // setTimeout(function(){ 
+            //     timeLine.stop()
+            //     timeLine.remove()
+            //     timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
+            //         width: 1
+            //     })
+            //     timeLine.animate(next.duree_note * 1000, '-', 0).attr({
+            //         x1: next.x_end,
+            //         x2: next.x_end
+            //     })
+            // }, (timer - (now - start)));
+            // console.log((timer-(now - start)))
+            console.log("not yet")
         }
         
     })
