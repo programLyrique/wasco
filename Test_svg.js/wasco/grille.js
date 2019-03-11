@@ -352,31 +352,7 @@ function run(partition, durationArray) {
 
         }
     }
-
-    for (let i = 0; i < height; i++) {
-
-        if ((i + 12) % revMidiMatrix.length == 0)
-            break
-
-        var key = revMidiMatrix[i + 12 % revMidiMatrix.length]
-
-        if (key.length > 2) {
-            var keyB = pianoroll.rect(100, 30).move(0, i * 30).fill('black').id(key)
-            var text = pianoroll.text(key)
-            text.move(40, i * 30).font({
-                fill: '#fff',
-                family: 'Arial'
-            })
-        } else {
-            var keyW = pianoroll.rect(100, 30).move(0, i * 30).fill('#e1e1e1').id(key)
-            var text = pianoroll.text(key)
-            text.move(40, i * 30).font({
-                fill: '#000',
-                family: 'Arial'
-            })
-        }
-    }
-
+    
     var start = Date.now();
     
     var timeLine = draw.line(100, 0, 100, height).stroke({
