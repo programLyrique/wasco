@@ -6,7 +6,7 @@ var message;
 // Create an osc.js UDP Port listening on port 57121.
 var udpPort = new osc.UDPPort({
     localAddress: "127.0.0.1",
-    localPort: 9001,
+    localPort: 6789,
     metadata: true
 });
 

@@ -13,7 +13,7 @@ for i in range(10):
     time.sleep(1)
     msg.append(i)
     try:
-        client.sendto(msg, ('127.0.0.1', 9001))
+        client.sendto(msg, ('127.0.0.1', 6789))
         msg.clearData()
     except:
         print 'Connection refused'

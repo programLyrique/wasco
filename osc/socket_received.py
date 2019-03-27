@@ -4,7 +4,7 @@ import socket
 from OSC import decodeOSC
 
 ip = '127.0.0.1'
-port = 9001
+port = 6789
 buffer_size = 1024
 do_loop = True
 
