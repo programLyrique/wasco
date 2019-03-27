@@ -1,8 +1,5 @@
 var socket = io.connect('http://localhost:8000');
 
-
-
-
 function getRandomColor() {
     var letters = '0123456789ABCDEF'
     var color = '#'
@@ -162,8 +159,10 @@ function run(partition, durationArray) {
 
     //Event Socket io
 
-    socket.on('message', function(message) {
-        console.log('Le serveur a un message pour vous : ' + message);
+    socket.on('OSC', function(message) {
+
+        console.log('Le serveur a un message pour vous : ');
+        console.log(message);
     
         //console.log(halfWindow)
         var timeL = timeLine.attr('x1')
@@ -194,7 +193,7 @@ function run(partition, durationArray) {
         
         now = Date.now()
         //timer = durationArray[Math.floor(Math.random() * Math.floor(durationArray.length - 1))]
-        timer = durationArray[0]
+        timer = 123456789
         if(timer <= now - start){
             timeLine.stop()
             timeLine.remove()
@@ -435,3 +434,5 @@ function run(partition, durationArray) {
     scrollTo(0, document.getElementById("F#5").getAttribute("y"))
 
 }
+
+
