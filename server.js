@@ -1,5 +1,4 @@
 var osc = require("osc");
-
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
@@ -27,7 +26,7 @@ var server = http.createServer((req, res) => {
 
 	if (page == '/') {
 
-		fs.readFile('./index.html', 'utf-8', function(error, content) {
+		fs.readFile('./display.html', 'utf-8', function(error, content) {
 
 		    res.writeHead(200, {"Content-Type": "text/html"});
 
@@ -35,8 +34,8 @@ var server = http.createServer((req, res) => {
 
     	});
     }
-    else if (page == '/SVG.js') {
-    	fs.readFile('./SVG.js', 'utf-8', function(error, content) {
+    else if (page == '/svg.js') {
+    	fs.readFile('./svg.js', 'utf-8', function(error, content) {
 
 		    res.writeHead(200, {"Content-Type": "text/javascript"});
 
