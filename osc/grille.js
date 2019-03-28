@@ -76,7 +76,7 @@ document.getElementById('file-input').addEventListener('change', readSingleFile,
 
 document.getElementById('real_duration').addEventListener('change', readDurationFile, false)
 
-    var rectPositionTab = []
+var rectPositionTab = []
 
 function run(partition, durationArray) {
 
@@ -155,27 +155,28 @@ function run(partition, durationArray) {
     }
 
     var sommeNoteDuration = 100
-    var halfWindow = window.innerWidth/2
-
-    //Event Socket io
+    var halfWindow = window.innerWidth / 2
+    var pitches = 0
     var flag = true
     var now
-    socket.on('OSC', function(message) {
-        if(flag){
+    //Event Socket io
+    socket.on('OSC', function (message) {
+        pitches++
+        if (flag) {
             now = Date()
         }
-        console.log('Le serveur a un message pour vous : ');
+        console.log('Le serveur a un message pour vous : ')
         console.log(message.args[0].value);
-    
+
         //console.log(halfWindow)
         var timeL = timeLine.attr('x1')
 
         //console.log(timeL)
 
-        if(timeL > halfWindow){
+        if (timeL > halfWindow) {
             console.log(timeL)
             console.log(halfWindow)
-            draw.animate(3000, '-', 0).move(-halfWindow+90,0)
+            draw.animate(3000, '-', 0).move(-halfWindow + 90, 0)
             halfWindow += window.innerWidth / 2
             console.log(halfWindow)
 
@@ -184,45 +185,48 @@ function run(partition, durationArray) {
         var currentNote = dichotomie(timeL, rectPositionTab)
         var indexCurr = rectPositionTab.indexOf(currentNote)
         var next
-        if(currentNote.x_init == currentNote.x_end){
+        if (currentNote.x_init == currentNote.x_end) {
             next = rectPositionTab[indexCurr + 1]
-        }else if(timeL == currentNote.x_init){
+        } else if (timeL == currentNote.x_init) {
             next = rectPositionTab[indexCurr]
-        }else if(timeL <= currentNote.x_end){
+        } else if (timeL <= currentNote.x_end) {
             next = rectPositionTab[indexCurr + 1]
         }
-        
-        
-       /* A vérifier */
+
+
+        /* A vérifier */
         timer = message.args[0].value + now
         //if(timer <= now - start){
-            timeLine.stop()
-            timeLine.remove()
+        timeLine.stop()
+        timeLine.remove()
+        if (next != undefined) {
             timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
                 width: 1
             })
-            timeLine.animate(next.duree_note * 1000, '-', 0).attr({
-                x1: next.x_end,
-                x2: next.x_end
-            })
+        }
+        timeLine.animate(next.duree_note * 1000, '-', 0).attr({
+            x1: next.x_end,
+            x2: next.x_end
+        })
         //}else {  //if(timer > now - start)
-            // setTimeout(function(){ 
-            //     timeLine.stop()
-            //     timeLine.remove()
-            //     timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
-            //         width: 1
-            //     })
-            //     timeLine.animate(next.duree_note * 1000, '-', 0).attr({
-            //         x1: next.x_end,
-            //         x2: next.x_end
-            //     })
-            // }, (timer - (now - start)));
-            // console.log((timer-(now - start)))
-            //console.log("not yet")
+        // setTimeout(function(){ 
+        //     timeLine.stop()
+        //     timeLine.remove()
+        //     timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
+        //         width: 1
+        //     })
+        //     timeLine.animate(next.duree_note * 1000, '-', 0).attr({
+        //         x1: next.x_end,
+        //         x2: next.x_end
+        //     })
+        // }, (timer - (now - start)));
+        // console.log((timer-(now - start)))
+        //console.log("not yet")
         //}
-        
-    });
 
+        // console.log("Pitches : " + pitches);
+        // console.log("" + rectPositionTab.length)
+    });
 
     for (var i = 1; i < partition.length - 1; i++) {
         var rectY = 0
@@ -360,9 +364,9 @@ function run(partition, durationArray) {
 
         }
     }
-    
-    var start = Date.now();
-    
+
+    // var start = Date.now();
+
     var timeLine = draw.line(100, 0, 100, height).stroke({
         width: 1
     }).id('timeLine')
@@ -370,5 +374,3 @@ function run(partition, durationArray) {
     scrollTo(0, document.getElementById("F#5").getAttribute("y"))
 
 }
-
-

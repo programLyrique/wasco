@@ -19,37 +19,41 @@ udpPort.open();
 
 var server = http.createServer((req, res) => {
 
-	var page = url.parse(req.url).pathname;
+    var page = url.parse(req.url).pathname;
 
-	if (page == '/') {
+    if (page == '/') {
 
-		fs.readFile('./display.html', 'utf-8', function(error, content) {
+        fs.readFile('./display.html', 'utf-8', function (error, content) {
 
-		    res.writeHead(200, {"Content-Type": "text/html"});
+            res.writeHead(200, {
+                "Content-Type": "text/html"
+            });
 
-		    res.end(content);
+            res.end(content);
 
-    	});
+        });
+    } else if (page == '/svg.js') {
+        fs.readFile('./svg.js', 'utf-8', function (error, content) {
+
+            res.writeHead(200, {
+                "Content-Type": "text/javascript"
+            });
+
+            res.end(content);
+
+        });
+    } else if (page == '/grille.js') {
+        fs.readFile('./grille.js', 'utf-8', function (error, content) {
+
+            res.writeHead(200, {
+                "Content-Type": "text/javascript"
+            });
+
+            res.end(content);
+
+        });
     }
-    else if (page == '/svg.js') {
-    	fs.readFile('./svg.js', 'utf-8', function(error, content) {
 
-		    res.writeHead(200, {"Content-Type": "text/javascript"});
-
-		    res.end(content);
-
-    	});
-    }
-    else if (page == '/grille.js') {
-    	fs.readFile('./grille.js', 'utf-8', function(error, content) {
-
-		    res.writeHead(200, {"Content-Type": "text/javascript"});
-
-		    res.end(content);
-
-    	});
-    }
-	
 });
 
 
@@ -60,11 +64,13 @@ io.sockets.on('connection', function (socket) {
 });
 
 udpPort.on("message", function (msg) {
+    console.log("osc message received");
     console.log(msg);
     message = msg;
-    console.log("emit hello");
-    if(sock != undefined){
-        sock.emit('OSC', message);
+    if (msg.address === '/antescofo/pitch') {
+        if (sock != undefined) {
+            sock.emit('OSC', message);
+        }
     }
 });
 
