@@ -158,11 +158,14 @@ function run(partition, durationArray) {
     var halfWindow = window.innerWidth/2
 
     //Event Socket io
-
+    var flag = true
+    var now
     socket.on('OSC', function(message) {
-
+        if(flag){
+            now = Date()
+        }
         console.log('Le serveur a un message pour vous : ');
-        console.log(message);
+        console.log(message.args[0].value);
     
         //console.log(halfWindow)
         var timeL = timeLine.attr('x1')
@@ -190,11 +193,9 @@ function run(partition, durationArray) {
         }
         
         
-        
-        now = Date.now()
-        //timer = durationArray[Math.floor(Math.random() * Math.floor(durationArray.length - 1))]
-        timer = 123456789
-        if(timer <= now - start){
+       /* A vérifier */
+        timer = message.args[0].value + now
+        //if(timer <= now - start){
             timeLine.stop()
             timeLine.remove()
             timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
@@ -204,7 +205,7 @@ function run(partition, durationArray) {
                 x1: next.x_end,
                 x2: next.x_end
             })
-        }else {  //if(timer > now - start)
+        //}else {  //if(timer > now - start)
             // setTimeout(function(){ 
             //     timeLine.stop()
             //     timeLine.remove()
@@ -217,71 +218,11 @@ function run(partition, durationArray) {
             //     })
             // }, (timer - (now - start)));
             // console.log((timer-(now - start)))
-            console.log("not yet")
-        }
+            //console.log("not yet")
+        //}
         
     });
-    
-    /*var intervalID = window.addEventListener("click", function () { // Simulate Event
-        
 
-        //console.log(halfWindow)
-        var timeL = timeLine.attr('x1')
-
-        //console.log(timeL)
-
-        if(timeL > halfWindow){
-            console.log(timeL)
-            console.log(halfWindow)
-            draw.animate(3000, '-', 0).move(-halfWindow+90,0)
-            halfWindow += window.innerWidth / 2
-            console.log(halfWindow)
-
-        }
-
-        var currentNote = dichotomie(timeL, rectPositionTab)
-        var indexCurr = rectPositionTab.indexOf(currentNote)
-        var next
-        if(currentNote.x_init == currentNote.x_end){
-            next = rectPositionTab[indexCurr + 1]
-        }else if(timeL == currentNote.x_init){
-            next = rectPositionTab[indexCurr]
-        }else if(timeL <= currentNote.x_end){
-            next = rectPositionTab[indexCurr + 1]
-        }
-        
-        
-        
-        now = Date.now()
-        //timer = durationArray[Math.floor(Math.random() * Math.floor(durationArray.length - 1))]
-        timer = durationArray[0]
-        if(timer <= now - start){
-            timeLine.stop()
-            timeLine.remove()
-            timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
-                width: 1
-            })
-            timeLine.animate(next.duree_note * 1000, '-', 0).attr({
-                x1: next.x_end,
-                x2: next.x_end
-            })
-        }else {  //if(timer > now - start)
-            // setTimeout(function(){ 
-            //     timeLine.stop()
-            //     timeLine.remove()
-            //     timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
-            //         width: 1
-            //     })
-            //     timeLine.animate(next.duree_note * 1000, '-', 0).attr({
-            //         x1: next.x_end,
-            //         x2: next.x_end
-            //     })
-            // }, (timer - (now - start)));
-            // console.log((timer-(now - start)))
-            console.log("not yet")
-        }
-        
-    })*/
 
     for (var i = 1; i < partition.length - 1; i++) {
         var rectY = 0
@@ -425,11 +366,6 @@ function run(partition, durationArray) {
     var timeLine = draw.line(100, 0, 100, height).stroke({
         width: 1
     }).id('timeLine')
-
-    timeLine.animate(rectPositionTab[0].duree_note * 1000, '-', 1000).attr({
-        x1: rectPositionTab[0].x_end,
-        x2: rectPositionTab[0].x_end
-    })
 
     scrollTo(0, document.getElementById("F#5").getAttribute("y"))
 
