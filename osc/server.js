@@ -3,15 +3,13 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var message;
-// Create an osc.js UDP Port listening on port 57121.
+
+// Create an osc.js UDP Port listening on port 6789.
 var udpPort = new osc.UDPPort({
     localAddress: "127.0.0.1",
     localPort: 6789,
     metadata: true
 });
-
-// Listen for incoming OSC bundles.
-
 
 // Open the socket.
 udpPort.open();
