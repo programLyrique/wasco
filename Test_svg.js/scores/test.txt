@@ -1,0 +1,40 @@
+; This is a sample score for AnteScofo - Anticipatory Score Following
+;	This is Ravel's habanera opening!
+
+BPM 60	
+	; Initialize Antescofo - These variables are automatically set upon "start"
+	;	These values might change within different performances
+	 antescofo-mess gamma -1.0, tune 444.0, pedal 0, suivi 1, nofharm 10 @local 
+	; The above also shows combinations of several messages as in Max/Pd message box
+;;; ASCOGRAPH STUFF
+;--------- connection OSC to AscoGraph
+oscsend osc_speed1 :6789 "/antescofo/accomp_speed"
+oscsend osc_begin1 :6789 "/antescofo/accomp_pos"
+
+NOTE 70 5.125 	Measure1
+NOTE 65 0  	 		; Grace notes take 0 duration (atemporal)
+NOTE 63 0	
+NOTE 55	4.0		Measure7
+NOTE 65 0  	 		; Grace notes take 0 duration (atemporal)
+NOTE 63 0	
+NOTE 65 0  	 		; Grace notes take 0 duration (atemporal)
+NOTE 63 0	
+NOTE 60 2.75		The_End
+NOTE 65 0  	 		; Grace notes take 0 duration (atemporal)
+NOTE 63 0
+NOTE 44 3.24	
+NOTE 65 0  	 		; Grace notes take 0 duration (atemporal)
+NOTE 63 0
+NOTE 38 2.0	
+NOTE 65 0  	 		; Grace notes take 0 duration (atemporal)
+NOTE 63 0	
+NOTE 45	4.0
+NOTE 55	4.0
+NOTE 74	4.0
+NOTE 48	4.0
+NOTE 39	4.0
+NOTE 75	4.0
+NOTE 32	4.0
+NOTE 65	4.0
+NOTE 47	4.0
+
