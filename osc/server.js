@@ -3,13 +3,15 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var message;
-
-// Create an osc.js UDP Port listening on port 6789.
+// Create an osc.js UDP Port listening on port 57121.
 var udpPort = new osc.UDPPort({
     localAddress: "127.0.0.1",
     localPort: 6789,
     metadata: true
 });
+
+// Listen for incoming OSC bundles.
+
 
 // Open the socket.
 udpPort.open();
@@ -61,15 +63,28 @@ io.sockets.on('connection', function (socket) {
     sock = socket;
 });
 
+ var cpt_pitch = 0;
+// var cpt_beat = 0;
 udpPort.on("message", function (msg) {
-    console.log("osc message received");
-    console.log(msg);
+    
     message = msg;
+
     if (msg.address === '/antescofo/pitch') {
-        if (sock != undefined) {
-            sock.emit('OSC', message);
+        cpt_pitch ++;
+        if(cpt_pitch>2){
+            console.log("osc message received");
+            console.log(msg);
+            if (sock != undefined) {
+                sock.emit('OSC', message);
+            }
         }
+        
     }
+    // if(msg.address === '/antescofo/event_beatpos'){
+    //     //cpt_beat ++;
+    //     //if(cpt_beat>2)
+    //         console.log(msg)
+    // }
 });
 
 server.listen(8000);
