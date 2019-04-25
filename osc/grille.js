@@ -23,33 +23,33 @@ var durationArray
 var partition = []
 
 
-document.getElementById('file-input').onchange = function() {
-        
-        var file = this.files[0];
-        var reader = new FileReader();
-        reader.onload = function(progressEvent) {
+document.getElementById('file-input').onchange = function () {
 
-            // line by line
-            var lines = this.result.split(/[\r\n]/);
-            for (var i = 0; i < lines.length; i++) {
-                var regex = /^(BPM|NOTE|CHORD|TRILL|MULTI)+/y;
-                if (!regex.test(lines[i])){
-                    if(i == lines.length - 1){
-                        console.log("EOF "+i)
-                        run(partition, durationArray)
-                    }
-                    continue;
-                }
-                partition.push(parser.parse(lines[i]));
-                if(i == lines.length - 1){
-                    console.log("EOF "+i)
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onload = function (progressEvent) {
+
+        // line by line
+        var lines = this.result.split(/[\r\n]/);
+        for (var i = 0; i < lines.length; i++) {
+            var regex = /^(BPM|NOTE|CHORD|TRILL|MULTI)+/y;
+            if (!regex.test(lines[i])) {
+                if (i == lines.length - 1) {
+                    console.log("EOF " + i)
                     run(partition, durationArray)
                 }
+                continue;
             }
-        };
+            partition.push(parser.parse(lines[i]));
+            if (i == lines.length - 1) {
+                console.log("EOF " + i)
+                run(partition, durationArray)
+            }
+        }
+    };
 
-        reader.readAsText(file);
-        
+    reader.readAsText(file);
+
 };
 
 
@@ -180,12 +180,10 @@ function run(partition, durationArray) {
 
     var sommeNoteDuration = 100
     var halfWindow = window.innerWidth / 2
-    var pitches = 0
     var flag = true
     var now
     //Event Socket io
-    socket.on('OSC', function (message) {
-        pitches++
+    socket.on('OSC-pitch', function (message) {
         if (flag) {
             now = Date()
         }
@@ -217,10 +215,6 @@ function run(partition, durationArray) {
             next = rectPositionTab[indexCurr + 1]
         }
 
-
-        /* A vérifier */
-        timer = message.args[0].value + now
-        //if(timer <= now - ){
         timeLine.stop()
         timeLine.remove()
         if (next != undefined) {
@@ -232,33 +226,39 @@ function run(partition, durationArray) {
             x1: next.x_end,
             x2: next.x_end
         })
-        //}else {  //if(timer > now - )
-        // setTimeout(function(){ 
-        //     timeLine.stop()
-        //     timeLine.remove()
-        //     timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
-        //         width: 1
-        //     })
-        //     timeLine.animate(next.duree_note * 1000, '-', 0).attr({
-        //         x1: next.x_end,
-        //         x2: next.x_end
-        //     })
-        // }, (timer - (now - )));
-        // console.log((timer-(now - )))
-        //console.log("not yet")
-        //}
-
-        // console.log("Pitches : " + pitches);
-        // console.log("" + rectPositionTab.length)
     });
+
+    socket.on('OSC-beatpos', (message) => {
+
+        console.log(message.args[0].value);
+
+
+        if (timeLine) {
+            timeLine.stop()
+            timeLine.remove()
+            if (message.args[0].value == 0) {
+                timeLine = draw.line(100, 0, 100, height).stroke({
+                    width: 1
+                })
+            } else {
+                timeLine = draw.line(message.args[0].value * 120, 0, message.args[0].value * 120, height).stroke({
+                    width: 1
+                })
+            }
+        }
+
+        var timeL = timeLine.attr('x1')
+        var currentNote = dichotomie(timeL, rectPositionTab)
+        timeLine.animate(currentNote.duree_note * 1000, '-', 0).attr({
+            x1: currentNote.x_end,
+            x2: currentNote.x_end
+        })
+
+    })
 
     for (var i = 0; i < partition.length; i++) {
 
-
-        console.log(i)
-
         var rectY = 0
-
 
         if (partition[i][0].NOTE != undefined && partition[i][0].NOTE != 0) { // NOTE
 
@@ -397,6 +397,6 @@ function run(partition, durationArray) {
         width: 1
     }).id('timeLine')
 
-    scrollTo(0, document.getElementById("F#5").getAttribute("y"))   
+    scrollTo(0, document.getElementById("F#5").getAttribute("y"))
 }
 

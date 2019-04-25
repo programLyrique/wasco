@@ -70,21 +70,24 @@ udpPort.on("message", function (msg) {
     message = msg;
 
     if (msg.address === '/antescofo/pitch') {
-        cpt_pitch ++;
-        if(cpt_pitch>2){
+        // cpt_pitch ++;
+        // if(cpt_pitch>2){
             console.log("osc message received");
             console.log(msg);
-            if (sock != undefined) {
-                sock.emit('OSC', message);
-            }
-        }
+            // if (sock != undefined) {
+            //     sock.emit('OSC-pitch', message);
+            // }
+        // }
         
     }
-    // if(msg.address === '/antescofo/event_beatpos'){
-    //     //cpt_beat ++;
-    //     //if(cpt_beat>2)
-    //         console.log(msg)
-    // }
+    if(msg.address === '/antescofo/event_beatpos'){
+        //cpt_beat ++;
+        //if(cpt_beat>2)
+        if (sock != undefined) {
+            sock.emit('OSC-beatpos', message);
+        }
+            console.log(msg)
+    }
 });
 
 server.listen(8000);
