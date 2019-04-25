@@ -231,29 +231,66 @@ function run(partition, durationArray) {
     socket.on('OSC-beatpos', (message) => {
 
         console.log(message.args[0].value);
-
-
         if (timeLine) {
-            timeLine.stop()
-            timeLine.remove()
+
+            var timeL = timeLine.attr('x1')
+            var currentNote = dichotomie(timeL, rectPositionTab)
+            var indexCurr = rectPositionTab.indexOf(currentNote)
+            var next
+            if (currentNote.x_init == currentNote.x_end) {
+                next = rectPositionTab[indexCurr + 1]
+            } else if (timeL == currentNote.x_init) {
+                next = rectPositionTab[indexCurr]
+            } else if (timeL <= currentNote.x_end) {
+                next = rectPositionTab[indexCurr + 1]
+            }
+
+            // Boucler sur les grace note
+            while (next.duree_note == 0) {
+                next ++;
+            }
+
+            var nextp
+            if (currentNote.x_init == currentNote.x_end) {
+                nextp = rectPositionTab[indexCurr + 1]
+            } else if (timeL == currentNote.x_init) {
+                nextp = rectPositionTab[indexCurr]
+            } else if (timeL <= currentNote.x_end) {
+                nextp = rectPositionTab[indexCurr + 1]
+            }
+
             if (message.args[0].value == 0) {
                 timeLine = draw.line(100, 0, 100, height).stroke({
                     width: 1
                 })
+            }
+            if (next.duree_note == 0) {
+                timeLine.stop()
+                timeLine.remove()
+                timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
+                    width: 1
+                })
+
+                timeLine.animate(next.duree_note * 1000, '-', 0).attr({
+                    x1: next.x_end,
+                    x2: next.x_end
+                })
+
             } else {
+
+                timeLine.stop()
+                timeLine.remove()
+
                 timeLine = draw.line(message.args[0].value * 120, 0, message.args[0].value * 120, height).stroke({
                     width: 1
                 })
+
+                timeLine.animate(currentNote.duree_note * 1000, '-', 0).attr({
+                    x1: currentNote.x_end,
+                    x2: currentNote.x_end
+                })
             }
         }
-
-        var timeL = timeLine.attr('x1')
-        var currentNote = dichotomie(timeL, rectPositionTab)
-        timeLine.animate(currentNote.duree_note * 1000, '-', 0).attr({
-            x1: currentNote.x_end,
-            x2: currentNote.x_end
-        })
-
     })
 
     for (var i = 0; i < partition.length; i++) {
