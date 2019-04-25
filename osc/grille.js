@@ -20,20 +20,39 @@ var map_color = [{ 'C': "#1abc9c" }, { 'C#': "#f7dc6f " }, { 'D': "#c0392b" }, {
 
 var durationArray
 
-function readDurationFile(e) {
-    var file = e.target.files[0]
-    if (!file) {
-        return
-    }
-    var reader = new FileReader()
-    reader.onload = function (e) {
-        var contents = e.target.result
-        durationArray = parse(contents)
-    }
-    reader.readAsText(file)
-}
+var partition = []
 
-var partition
+
+document.getElementById('file-input').onchange = function() {
+        
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.onload = function(progressEvent) {
+
+            // line by line
+            var lines = this.result.split(/[\r\n]/);
+            for (var i = 0; i < lines.length; i++) {
+                var regex = /^(BPM|NOTE|CHORD|TRILL|MULTI)+/y;
+                if (!regex.test(lines[i])){
+                    if(i == lines.length - 1){
+                        console.log("EOF "+i)
+                        run(partition, durationArray)
+                    }
+                    continue;
+                }
+                partition.push(parser.parse(lines[i]));
+                if(i == lines.length - 1){
+                    console.log("EOF "+i)
+                    run(partition, durationArray)
+                }
+            }
+        };
+
+        reader.readAsText(file);
+        
+};
+
+
 
 function readSingleFile(e) {
     var file = e.target.files[0]
@@ -80,10 +99,6 @@ function dichotomie(timeLine, tab) {
         }
     }
 }
-
-document.getElementById('file-input').addEventListener('change', readSingleFile, false)
-
-document.getElementById('real_duration').addEventListener('change', readDurationFile, false)
 
 var rectPositionTab = []
 
@@ -205,7 +220,7 @@ function run(partition, durationArray) {
 
         /* A vérifier */
         timer = message.args[0].value + now
-        //if(timer <= now - start){
+        //if(timer <= now - ){
         timeLine.stop()
         timeLine.remove()
         if (next != undefined) {
@@ -217,7 +232,7 @@ function run(partition, durationArray) {
             x1: next.x_end,
             x2: next.x_end
         })
-        //}else {  //if(timer > now - start)
+        //}else {  //if(timer > now - )
         // setTimeout(function(){ 
         //     timeLine.stop()
         //     timeLine.remove()
@@ -228,8 +243,8 @@ function run(partition, durationArray) {
         //         x1: next.x_end,
         //         x2: next.x_end
         //     })
-        // }, (timer - (now - start)));
-        // console.log((timer-(now - start)))
+        // }, (timer - (now - )));
+        // console.log((timer-(now - )))
         //console.log("not yet")
         //}
 
@@ -237,7 +252,11 @@ function run(partition, durationArray) {
         // console.log("" + rectPositionTab.length)
     });
 
-    for (var i = 1; i < partition.length - 1; i++) {
+    for (var i = 0; i < partition.length; i++) {
+
+
+        console.log(i)
+
         var rectY = 0
 
 
@@ -372,12 +391,12 @@ function run(partition, durationArray) {
         }
     }
 
-    // var start = Date.now();
+    // var  = Date.now();
 
     var timeLine = draw.line(100, 0, 100, height).stroke({
         width: 1
     }).id('timeLine')
 
-    scrollTo(0, document.getElementById("F#5").getAttribute("y"))
-
+    scrollTo(0, document.getElementById("F#5").getAttribute("y"))   
 }
+
