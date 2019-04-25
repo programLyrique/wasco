@@ -9,6 +9,15 @@ function getRandomColor() {
     return color
 }
 
+function getColor(pitch) {
+    return map_color[pitch]
+}
+
+/**
+ * map_color : pitch -> color
+ */
+var map_color = [{ 'C': "#1abc9c" }, { 'C#': "#f7dc6f " }, { 'D': "#c0392b" }, { 'D#': "#e67e22" }, { 'E': "#2980b9" }, { 'F': "#58d68d" }, { 'F#': "#7f8c8d" }, { 'G': " #34495e" }, { 'G#': "#34495e" }, { 'A': "#f1c40f" }, { 'A#': "#85c1e9" }, { 'B': "#6c3483" }]
+
 var durationArray
 
 function readDurationFile(e) {
@@ -254,7 +263,7 @@ function run(partition, durationArray) {
             } else {
 
                 var rect = draw.rect(120 * partition[i][1].duration, 30)
-                    .fill(getRandomColor())
+                    .fill(getColor(midiMatrix[partition[i][0].NOTE]))
                     .move(sommeNoteDuration, rectY)
                     .id(sommeNoteDuration)
 
@@ -263,8 +272,6 @@ function run(partition, durationArray) {
             }
 
         } else if (partition[i][0].TRILL) { // TRILL
-
-            var color = getRandomColor()
 
             rectPositionTab.push({
                 x_init: sommeNoteDuration,
@@ -293,7 +300,7 @@ function run(partition, durationArray) {
                     for (var d = 0; d < chord.length; d++) {
                         rectY = document.getElementById(midiMatrix[chord[d]]).getAttribute("y")
                         var rect = draw.rect(120 * (partition[i][1].duration / nbNote), 30)
-                            .fill(color)
+                            .fill(getColor(midiMatrix[chord[d]]))
                             .move(sommeNoteDuration, rectY)
                             .id(sommeNoteDuration)
                     }
@@ -316,7 +323,7 @@ function run(partition, durationArray) {
                     } else {
 
                         var rect = draw.rect(120 * (partition[i][1].duration / trill.length), 30)
-                            .fill(color)
+                            .fill(getColor(midiMatrix[trill[k]]))
                             .move(sommeNoteDuration, rectY)
                             .id(sommeNoteDuration);
 
@@ -327,14 +334,14 @@ function run(partition, durationArray) {
 
         } else if (partition[i][0].CHORD) {
 
-            var color = getRandomColor()
+            var color = getColor()
             var chord = partition[i][0].CHORD
             var duree = partition[i][1].duration
             for (var k = 0; k < chord.length; k++) {
 
                 rectY = document.getElementById(midiMatrix[chord[k]]).getAttribute("y")
                 var rect = draw.rect(120 * duree, 30)
-                    .fill(color)
+                    .fill(getColor(midiMatrix[chord[k]]))
                     .move(sommeNoteDuration, rectY)
                     .id(sommeNoteDuration)
             }
