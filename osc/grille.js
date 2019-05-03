@@ -10,14 +10,13 @@ function getRandomColor() {
 }
 
 function getColor(pitch) {
-    return map_color[pitch]
+    return map_color[pitch.split(/(\d+)/)[0]]
 }
 
 /**
  * map_color : pitch -> color
  */
-var map_color = [{ 'C': "#1abc9c" }, { 'C#': "#f7dc6f " }, { 'D': "#c0392b" }, { 'D#': "#e67e22" }, { 'E': "#2980b9" }, { 'F': "#58d68d" }, { 'F#': "#7f8c8d" }, { 'G': " #34495e" }, { 'G#': "#34495e" }, { 'A': "#f1c40f" }, { 'A#': "#85c1e9" }, { 'B': "#6c3483" }]
-
+var map_color = { 'C': "#1abc9c", 'C#': "#f7dc6f ", 'D': "#c0392b", 'D#': "#e67e22", 'E': "#2980b9", 'F': "#58d68d", 'F#': "#7f8c8d", 'G': " #34495e", 'G#': "#48795e", 'A': "#f1c40f", 'A#': "#85c1e9", 'B': "#6c3483" }
 var durationArray
 
 var partition = []
@@ -247,7 +246,7 @@ function run(partition, durationArray) {
 
             // Boucler sur les grace note
             while (next.duree_note == 0) {
-                next ++;
+                next++;
             }
 
             var nextp
@@ -390,7 +389,6 @@ function run(partition, durationArray) {
 
         } else if (partition[i][0].CHORD) {
 
-            var color = getColor()
             var chord = partition[i][0].CHORD
             var duree = partition[i][1].duration
             for (var k = 0; k < chord.length; k++) {
