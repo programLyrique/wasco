@@ -181,64 +181,15 @@ function run(partition, durationArray) {
 
     var sommeNoteDuration = 100
     var halfWindow = window.innerWidth / 2
-    var flag = true
-    var now
-    //Event Socket io
-    socket.on('OSC-pitch', function (message) {
-        if (flag) {
-            now = Date()
-        }
-        console.log('Le serveur a un message pour vous : ')
-        console.log(message.args[0].value);
-
-        //console.log(halfWindow)
-        var timeL = timeLine.attr('x1')
-
-        //console.log(timeL)
-
-        if (timeL > halfWindow) {
-            console.log(timeL)
-            console.log(halfWindow)
-            draw.animate(3000, '-', 0).move(-halfWindow + 90, 0)
-            halfWindow += window.innerWidth / 2
-            console.log(halfWindow)
-
-        }
-
-        var currentNote = dichotomie(timeL, rectPositionTab)
-        var indexCurr = rectPositionTab.indexOf(currentNote)
-        var next
-        if (currentNote.x_init == currentNote.x_end) {
-            next = rectPositionTab[indexCurr + 1]
-        } else if (timeL == currentNote.x_init) {
-            next = rectPositionTab[indexCurr]
-        } else if (timeL <= currentNote.x_end) {
-            next = rectPositionTab[indexCurr + 1]
-        }
-
-        timeLine.stop()
-        timeLine.remove()
-        if (next != undefined) {
-            timeLine = draw.line(next.x_init, 0, next.x_init, height).stroke({
-                width: 1
-            })
-        }
-        timeLine.animate(next.duree_note * 1000, '-', 0).attr({
-            x1: next.x_end,
-            x2: next.x_end
-        })
-    });
-
     socket.on('OSC-beatpos', (message) => {
-        var halfWindow = window.innerWidth / 2
         
-        console.log(message.args[0].value);
+        
         if (timeLine) {
             var timeL = timeLine.attr('x1')
             if (timeL > halfWindow) {
                 // console.log(timeL)
                 // console.log(halfWindow)
-                draw.animate(3000, '-', 0).move(-halfWindow + 90, 0)
+                draw.animate(1000, '-', 0).move(-halfWindow + 90, 0)
                 halfWindow += window.innerWidth / 2
                 //console.log(halfWindow)
             }
@@ -247,9 +198,9 @@ function run(partition, durationArray) {
             timeLine.remove()
 
             if (message.args[0].value == 0) {
-                console.log("saut")
+                //console.log("saut")
                 timeLine = draw.line(100, 0, 100, height).stroke({
-                    width: 1
+                    width: 2
                 })
             }else{
 
@@ -258,27 +209,37 @@ function run(partition, durationArray) {
                 var ij = map_grace_note_beatPos.length -1
                 while(ij>=0){
                     if(message.args[0].value >= map_grace_note_beatPos[ij]){
-                        console.log("saut")
-                        //console.log("beat_pos : "+message.args[0].value+" map_grace_note_beatPos["+ij+"] "+map_grace_note_beatPos[ij])
-                        timeLine = draw.line(100+(message.args[0].value * 120) + ((ij+1) * 30), 0, 100+(message.args[0].value * 120) + ((ij+1) * 30), height).stroke({
-                            width: 1
+                        //console.log("saut")
+                        // console.log("beat_pos : "+message.args[0].value+
+                        //     " map_grace_note_beatPos["+(ij+1)+"] "+map_grace_note_beatPos[ij])
+                        timeLine = draw.line(100+(message.args[0].value * 120) + ((ij+1) * 30), 0,
+                                             100+(message.args[0].value * 120) + ((ij+1) * 30), height)
+                        .stroke({
+                            width: 2
                         })
+                        //console.log("timeLine : "+timeLine.attr('x1'))
                         break;
                     }
                     ij--
                 }
                 
                 if(ij < 0){
-                    console.log("saut")
-                    timeLine = draw.line(100+(message.args[0].value * 120), 0, 100+(message.args[0].value * 120) + ((ij+1) * 30), height).stroke({
-                        width: 1
+                    //console.log("saut")
+                    timeLine = draw.line(100+(message.args[0].value * 120), 0,
+                                         100+(message.args[0].value * 120), height)
+                    .stroke({
+                        width: 2
                     })
                 } 
             }
             
             timeL = timeLine.attr('x1')
             var currentNote = dichotomie(timeL, rectPositionTab)
-
+            //console.log(currentNote)
+            // if(currentNote.duree_note == 0){
+            //     console.log("grace note")
+            //     console.log(currentNote.x_init)
+            // }
             timeLine.animate(currentNote.duree_note * 1000, '-', 0).attr({
                 x1: currentNote.x_end,
                 x2: currentNote.x_end
@@ -288,25 +249,32 @@ function run(partition, durationArray) {
     })
 
 
-    var nb_grace_note = 0
     var map_grace_note_beatPos = []
-
+    var beat_pos = 0
     for (var i = 0; i < partition.length; i++) {
 
         var rectY = 0
 
         if (partition[i][0].NOTE != undefined && partition[i][0].NOTE != 0) { // NOTE
 
-            rectPositionTab.push({
-                x_init: sommeNoteDuration,
-                x_end: sommeNoteDuration + 120 * partition[i][1].duration,
-                duree_note: partition[i][1].duration
-            })
+            if(partition[i][1].duration == 0){
+                rectPositionTab.push({
+                    x_init: sommeNoteDuration,
+                    x_end: sommeNoteDuration + 30,
+                    duree_note: partition[i][1].duration
+                })
+            }else{
+                rectPositionTab.push({
+                    x_init: sommeNoteDuration,
+                    x_end: sommeNoteDuration + 120 * partition[i][1].duration,
+                    duree_note: partition[i][1].duration
+                })
+            }
+           
 
             rectY = document.getElementById(midiMatrix[partition[i][0].NOTE]).getAttribute("y")
 
             if (partition[i][1].duration == 0) { // Grace note
-                nb_grace_note ++
 
                 var rect = draw.rect(30, 30)
                     .fill("#000")
@@ -314,7 +282,7 @@ function run(partition, durationArray) {
                     .radius(50)
 
                 sommeNoteDuration += 30
-                map_grace_note_beatPos.push((sommeNoteDuration - (30*nb_grace_note))/120)
+                map_grace_note_beatPos.push(beat_pos)
             } else {
 
                 var rect = draw.rect(120 * partition[i][1].duration, 30)
@@ -323,11 +291,11 @@ function run(partition, durationArray) {
                     .id(sommeNoteDuration)
 
                 sommeNoteDuration += 120 * partition[i][1].duration
-
+                beat_pos += partition[i][1].duration
             }
 
         } else if (partition[i][0].TRILL) { // TRILL
-
+            beat_pos += partition[i][1].duration
             rectPositionTab.push({
                 x_init: sommeNoteDuration,
                 x_end: sommeNoteDuration + 120 * partition[i][1].duration,
@@ -348,7 +316,7 @@ function run(partition, durationArray) {
             }
 
             for (var k = 0; k < trill.length; k++) {
-
+                
                 if (trill[k].CHORD) {
 
                     var chord = trill[k].CHORD
@@ -367,7 +335,6 @@ function run(partition, durationArray) {
                     rectY = document.getElementById(midiMatrix[trill[k]]).getAttribute("y")
 
                     if (partition[i][1].duration == 0) { // Grace note
-                        nb_grace_note ++
 
                         var rect = draw.rect(30, 30).fill("#000")
                             .move(sommeNoteDuration, rectY)
@@ -375,7 +342,7 @@ function run(partition, durationArray) {
                             .id(sommeNoteDuration);
 
                         sommeNoteDuration += 30
-                        map_grace_note_beatPos.push((sommeNoteDuration - (30*nb_grace_note))/120)
+                        map_grace_note_beatPos.push(beat_pos)
                     } else {
 
                         var rect = draw.rect(120 * (partition[i][1].duration / trill.length), 30)
@@ -408,7 +375,7 @@ function run(partition, durationArray) {
             })
 
             sommeNoteDuration += 120 * duree
-
+            beat_pos += duree
         } else if (partition[i][0].NOTE == 0) { // silence
 
             var rect = draw.rect(120 * partition[i][1].duration, height)
@@ -423,7 +390,7 @@ function run(partition, durationArray) {
             })
 
             sommeNoteDuration += 120 * partition[i][1].duration
-
+            beat_pos += partition[i][1].duration
         }
     }
 
