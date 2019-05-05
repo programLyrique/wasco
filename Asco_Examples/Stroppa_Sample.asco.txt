@@ -1,0 +1,220 @@
+; This is a sample score for AnteScofo - Anticipatory Score Following
+;	Excerpt from Marco Stroppa's LITTLE-I for Flute and Electronics.
+;	This example shows the use of most Antescofo score vocabularies in more unconventional settings.
+
+BPM    33.0 	; Initial score tempo
+	; Initialize Antescofo - These variables are automatically set upon "start"
+	;	These values might change within different performances
+	 antescofo-mess gamma -3.0, tune 440.0, pedal 0, suivi 1 
+	; The above also shows combinations of several messages as in Max/Pd message box
+
+NOTE 0 1.0	
+;TEMPO OFF		; Because of a fermata
+VARIANCE 0.3	; Variance equal to 0.3*semi-tone	
+TRILL ( 6100 6200 6080 ) 8.0 b1-tr±50cents 
+;TEMPO ON		; Fermata ends
+NOTE 0 1.0 
+MULTI ( 6100 6150 6200 ) 4.0 b2 ; defined as MULTI: think of a fixed contour
+MULTI ( 6300 6200 6150 6100 ) 4.0 gliss-tr ; Another MULTI, but a distinct event
+NOTE 0 1.0 b3-hook 	@hook
+NOTE 6400 1.0 	
+NOTE 6150 1.0 	
+NOTE 6420 1.0 	
+NOTE 6100 2.0	this61
+TEMPO OFF
+TRILL ( 5900 5800 ) 2.0 tr-si3+ferm 
+TEMPO ON
+NOTE 5800 0.5 b4 
+TRILL ( 6100 6000 ) 2.0 mord-tr 
+NOTE 6150 1.0 
+NOTE 6400 1.0 
+NOTE 6350 2.0 
+NOTE 6250 1.0 
+NOTE 6200 0.75 
+NOTE 5600 1.0 b5 
+NOTE 6250 1.5 
+NOTE 6300 0.75 
+NOTE 6350 2.5 mordpch 
+NOTE 6600 0.5 b6+ 
+NOTE 6200 0.5 
+NOTE 6350 0.5 
+NOTE 5500 0.666 
+TEMPO OFF
+NOTE 5700 2.0 ferm 
+TEMPO ON
+NOTE 0 1.0 b7-hook   
+NOTE 6350 1.0 
+NOTE 6450 0.75 
+NOTE 6400 1.5 
+NOTE 5950 1.0 
+NOTE 6300 1.25 
+NOTE 5700 1.0 
+NOTE 5600 1.75 	this56
+NOTE 5800 1.333 	this58
+TEMPO OFF
+NOTE 5900 2.0 	thisTpff59
+TEMPO ON
+NOTE 0 0.5 b8-hook ; removed HOOK  
+TEMPO OFF
+TRILL ( 6570 7100 ) 10.0 b8_mult1off 
+TEMPO ON
+NOTE 6350 0 b9 
+NOTE 6150 0 
+NOTE 6300 4.0 
+MULTI ( 6250 6100 ) 4.0 mordmulti 
+NOTE 0 0.5 b10hook 	@hook
+NOTE 6350 0.5 
+NOTE 6250 0.5 
+TRILL ( 6200 6150 ) 3.0 mordtr 	; Should be MULTI?
+NOTE 6550 0.333 
+NOTE 6600 0.333 
+NOTE 6850 0.333 
+NOTE 6950 0.333 
+NOTE 7200 2.083 
+NOTE 7500 0.25 b11+ 
+MULTI ( 7200 7300 7400 7500 7550 ) 1.5 gls 	; Changed to MULTI
+NOTE 7600 2.5 
+NOTE 7800 0 grace 
+TEMPO OFF
+NOTE 0 1.0 					; removed HOOK  
+TEMPO ON
+VARIANCE 0.3			; WHY???
+NOTE 7700 0 b12grace 
+NOTE 7500 0 
+NOTE 7100 0.4 
+NOTE 7150 0.4 
+NOTE 6850 0.4 
+NOTE 6600 0.4 
+NOTE 6150 2.4 
+NOTE 6350 0 b12+grace 
+NOTE 8350 0 
+NOTE 6100 1.0 
+NOTE 6050 2.5 
+NOTE 5900 1.5 
+TRILL ( 6500 6450 ) 1.0 mordtr_sib4 	
+NOTE 6400 1.0 
+NOTE 6600 1.0 
+NOTE 6650 1.5 
+NOTE 6700 0.75 
+MULTI ( 6750 6700 6650 6600 ) 1.0  BeforeCatas	
+NOTE 0	0.5		fakehook	@hook	
+VARIANCE	0.3
+TEMPO OFF
+TRILL ( 6750 7300 7250 6800 ) 4.0 glstr_off	
+NOTE  0 2.0 hook_off		@hook				 	
+VARIANCE	0.5
+TEMPO ON
+BPM    45.0 
+NOTE 6000 1.0 b14_mm45 
+NOTE 5750 1.0 
+NOTE 6050 1.0 
+NOTE 5700 1.0 
+NOTE 6100 1.0 
+NOTE 6550 1.0 
+NOTE 6000 1.0 
+NOTE 6650 1.0 
+NOTE 6800 1.5 
+NOTE 6600 1.0 
+NOTE 5950 2.0 
+NOTE 5700 1.0 
+TEMPO OFF
+NOTE 5600 4.0 ferm-b14
+TEMPO ON
+BPM    33.0 
+NOTE 6050 1.0 b15_mm33_breath 
+NOTE 5700 1.5 
+NOTE 6150 0.5 
+NOTE 6600 1.5 
+NOTE 6850 1.75 
+NOTE 6000 1.25 
+NOTE 5700 1.5 
+TEMPO OFF
+NOTE 5600 4.0 ferm-b15
+NOTE  0 2.0 b16hook 	@hook
+TEMPO ON
+BPM    40.0 
+NOTE 5950 1.0 fltz1 
+NOTE 5600 1.0 fltz2
+NOTE 6000 1.0 fltz3
+NOTE 6050 1.0 fltz4
+NOTE 6600 1.5 fltz5
+NOTE 6550 1.5 fltz6
+NOTE 6500 1.0 fltz7
+NOTE 6450 2.0 fltz8
+NOTE 6400 4.0 gliss-2- 
+TEMPO OFF
+NOTE 6300 3.0 ferm-b17
+NOTE  0 1.0 b178hook 	@hook
+TEMPO ON
+NOTE 6300 1.143 septuplet 
+NOTE 6550 0.143 
+NOTE 6500 0.143 
+NOTE 6650 0.143 
+NOTE 7100 0.143 
+NOTE 7300 0.143 
+NOTE 7650 0.143 
+BPM    33.0 
+NOTE 0 1.0 b18 
+NOTE 5700 1.0 
+NOTE 6000 1.0 
+NOTE 6050 1.0 
+NOTE 6500 1.0 
+NOTE 7150 1.0 
+NOTE 7450 1.0 
+TEMPO OFF
+MULTI ( 7900 7800 7700 ) 4.0 bisb+glsferm 
+NOTE 0 1.0 hookrestoff		 
+TRILL ( 6800 7250 ) 4.0 mult1_off 	
+TRILL ( 6570 7100 ) 4.0 mult2_off 
+NOTE  0 1.5 resthook_off 	@hook
+TEMPO ON
+NOTE 5950 0.1 quintuplet 
+NOTE 5800 0.1 
+NOTE 5600 0.1 
+NOTE 5700 0.1 
+NOTE 6200 0.1 
+NOTE 6300 0.25 
+NOTE 6500 1.75 
+NOTE 6450 0.75 
+NOTE 6700 0.5 
+NOTE 6950 1.25 
+NOTE 5950 1.25 thisMi
+TEMPO OFF
+TRILL ( 5800 5720 ) 4.0 mordtr_off 
+NOTE 0 1.0 hookrest_off 	@hook
+NOTE 6450 2.0 b21_Mult1a_pch  ; tempo off until the end 
+TRILL ( 7600 6450 ) 2.0 mult1b_tr 
+NOTE 6500 2.0 mult2a_pch 
+TRILL ( 7850 7600 6450 ) 2.0 mult2b_tr 
+TEMPO OFF
+BPM    40.0 
+VARIANCE 0.7
+NOTE 8900 1.0 b23wt ; was 88
+NOTE 9000 1.0 
+NOTE 8900 0.75 		; was88
+NOTE 9000 0.25 
+NOTE 8800 1.5 
+NOTE 8900 0.75 
+NOTE 0 1.0 	; removed HOOK 
+NOTE 8800 1.0 b24 
+NOTE 9100 0.75 
+NOTE 8900 0.25 
+NOTE 9000 1.5 
+NOTE 8800 0.75 
+NOTE 9300 0.75 b25 
+NOTE 8900 0.5 
+NOTE 8700 1.5 
+NOTE 0 1.0 breath_off	 
+NOTE 8900 1.0 
+NOTE 8600 0.75 
+NOTE 8800 0.75 b26 
+NOTE 8900 0.75 
+NOTE 8700 0.75 
+NOTE 9300 4.0 ferm 
+NOTE 9200 1.0 b27endgls 
+NOTE 9100 1.0 
+NOTE 9000 1.0 
+NOTE 8900 1.0 
+NOTE 8800 1.0 
+NOTE 8700 4.0 
+NOTE 0 4.0 The_End 

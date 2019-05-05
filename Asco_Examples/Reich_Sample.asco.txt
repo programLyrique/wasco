@@ -1,0 +1,136 @@
+; Antescofo score example on Steve Reich
+; Saxophone recording, courtesy of Claude de Langle (http://www.sax-delangle.com/)
+;		Tempo changes in audio are done on purpose for demonstrating Antescofo!
+;		Thank you Claude!
+BPM   220
+	; Initialize Antescofo - These variables are automatically set upon "start"
+	;	These values might change within different performances
+	 antescofo-mess gamma -1.0, tune 440.0, pedal 0, nofharm 10, suivi 1 @local 
+	; The above also shows combinations of several messages as in Max/Pd message box
+	print I am in the VERY BEGINNING
+VARIANCE 0.3
+NOTE 0		2.0
+NOTE 6800  0.5	Begin
+	print I am on first note 	
+	
+LFWD metronome 1.0 		; Our adaptive Metronome, defined using a simple LFWD
+	{
+		click1 bang 	
+	}
+	
+; Or uncomment this group to enjoy the rythmic ride!	
+/*	LFWD metronome 2.0 	; @tight
+	{
+		click1 bang 	; Our adaptive Metronome, defined using a simple LFWD
+		1.0 click1 bang
+	}
+	
+	
+	LFWD metronome2 2.0	;@tempo 100
+	{
+		click2 bang 	; Our adaptive Metronome, defined using a simple LFWD
+		2/3 click2 bang
+		2/3 click2 bang
+	}*/
+		
+	
+NOTE 6200  0.5	
+NOTE 0   0.5	
+NOTE 6600  0.5	; was 67
+NOTE 0   2.0
+NOTE 7100  1.5	; was 72
+NOTE 0   0.5
+NOTE 6600  0.5	; was 67
+NOTE 6800  0.5
+NOTE 0   5.0
+NOTE 6800  0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   2.0
+NOTE 7100  1.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 6800  0.5
+NOTE 0   2.0
+NOTE 7100  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   0.5
+NOTE 6800  0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   1.5
+NOTE 6400  0.5
+NOTE 7100  1.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 6800  0.5
+NOTE 0   0.5
+NOTE 6200  0.5
+NOTE 0   2.0
+NOTE 7100  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   0.5
+NOTE 6800  0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   1.5
+NOTE 6400  0.5
+NOTE 7100  1.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 6800  0.5
+NOTE 0   0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 5800  0.5
+NOTE 0   0.5
+NOTE 7100  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   0.5
+NOTE 6800  0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   0.5
+NOTE 5800  0.5
+NOTE 0   0.5
+NOTE 6400  0.5
+NOTE 7100  1.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 6800  0.5
+NOTE 0   0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 5800  0.5
+NOTE 0   0.5
+NOTE 7100  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   0.5
+NOTE 6800  0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 0   0.5
+NOTE 5800  0.5
+NOTE 0   0.5
+NOTE 6400  0.5
+NOTE 7100  1.5
+NOTE 0   0.5
+NOTE 6600  0.5
+NOTE 6800  0.5
+NOTE 0   0.5
+NOTE 6200  0.5
+NOTE 0   0.5
+NOTE 6600  0.5	End
+	KILL metronome		; Stop Metronome
+NOTE 0   2.0

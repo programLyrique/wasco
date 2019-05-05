@@ -97,7 +97,7 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('FileEvent', function(fichier){
         console.log(fichier);
-        var cmd = "/home/moumouh/Asco_Examples/"+fichier;
+        var cmd = __dirname + "/../Asco_Examples/"+fichier;
         udpPort.send({
             address: "/antescofo/cmd",
             args: [

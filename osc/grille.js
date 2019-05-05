@@ -182,8 +182,8 @@ function run(partition, durationArray) {
     var sommeNoteDuration = 100
     var halfWindow = window.innerWidth / 2
     socket.on('OSC-beatpos', (message) => {
-        
-        
+
+
         if (timeLine) {
             var timeL = timeLine.attr('x1')
             if (timeL > halfWindow) {
@@ -193,7 +193,7 @@ function run(partition, durationArray) {
                 halfWindow += window.innerWidth / 2
                 //console.log(halfWindow)
             }
-            
+
             timeLine.stop()
             timeLine.remove()
 
@@ -202,37 +202,37 @@ function run(partition, durationArray) {
                 timeLine = draw.line(100, 0, 100, height).stroke({
                     width: 2
                 })
-            }else{
+            } else {
 
-                
 
-                var ij = map_grace_note_beatPos.length -1
-                while(ij>=0){
-                    if(message.args[0].value >= map_grace_note_beatPos[ij]){
+
+                var ij = map_grace_note_beatPos.length - 1
+                while (ij >= 0) {
+                    if (message.args[0].value >= map_grace_note_beatPos[ij]) {
                         //console.log("saut")
                         // console.log("beat_pos : "+message.args[0].value+
                         //     " map_grace_note_beatPos["+(ij+1)+"] "+map_grace_note_beatPos[ij])
-                        timeLine = draw.line(100+(message.args[0].value * 120) + ((ij+1) * 30), 0,
-                                             100+(message.args[0].value * 120) + ((ij+1) * 30), height)
-                        .stroke({
-                            width: 2
-                        })
+                        timeLine = draw.line(100 + (message.args[0].value * 120) + ((ij + 1) * 30), 0,
+                            100 + (message.args[0].value * 120) + ((ij + 1) * 30), height)
+                            .stroke({
+                                width: 2
+                            })
                         //console.log("timeLine : "+timeLine.attr('x1'))
                         break;
                     }
                     ij--
                 }
-                
-                if(ij < 0){
+
+                if (ij < 0) {
                     //console.log("saut")
-                    timeLine = draw.line(100+(message.args[0].value * 120), 0,
-                                         100+(message.args[0].value * 120), height)
-                    .stroke({
-                        width: 2
-                    })
-                } 
+                    timeLine = draw.line(100 + (message.args[0].value * 120), 0,
+                        100 + (message.args[0].value * 120), height)
+                        .stroke({
+                            width: 2
+                        })
+                }
             }
-            
+
             timeL = timeLine.attr('x1')
             var currentNote = dichotomie(timeL, rectPositionTab)
             //console.log(currentNote)
@@ -244,7 +244,7 @@ function run(partition, durationArray) {
                 x1: currentNote.x_end,
                 x2: currentNote.x_end
             })
-            
+
         }
     })
 
@@ -257,20 +257,20 @@ function run(partition, durationArray) {
 
         if (partition[i][0].NOTE != undefined && partition[i][0].NOTE != 0) { // NOTE
 
-            if(partition[i][1].duration == 0){
+            if (partition[i][1].duration == 0) {
                 rectPositionTab.push({
                     x_init: sommeNoteDuration,
                     x_end: sommeNoteDuration + 30,
                     duree_note: partition[i][1].duration
                 })
-            }else{
+            } else {
                 rectPositionTab.push({
                     x_init: sommeNoteDuration,
                     x_end: sommeNoteDuration + 120 * partition[i][1].duration,
                     duree_note: partition[i][1].duration
                 })
             }
-           
+
 
             rectY = document.getElementById(midiMatrix[partition[i][0].NOTE]).getAttribute("y")
 
@@ -315,15 +315,21 @@ function run(partition, durationArray) {
                 }
             }
 
+            var color = draw.gradient('linear', function (stop) {
+                stop.at(0, '#FF4E50')
+                stop.at(1, '#F9D423')
+            })
+
             for (var k = 0; k < trill.length; k++) {
-                
+
                 if (trill[k].CHORD) {
 
                     var chord = trill[k].CHORD
                     for (var d = 0; d < chord.length; d++) {
                         rectY = document.getElementById(midiMatrix[chord[d]]).getAttribute("y")
                         var rect = draw.rect(120 * (partition[i][1].duration / nbNote), 30)
-                            .fill(getColor(midiMatrix[chord[d]]))
+                            // .fill(getColor(midiMatrix[chord[d]]))
+                            .fill(color)
                             .move(sommeNoteDuration, rectY)
                             .id(sommeNoteDuration)
                     }
@@ -346,7 +352,8 @@ function run(partition, durationArray) {
                     } else {
 
                         var rect = draw.rect(120 * (partition[i][1].duration / trill.length), 30)
-                            .fill(getColor(midiMatrix[trill[k]]))
+                            // .fill(getColor(midiMatrix[trill[k]]))
+                            .fill(color)
                             .move(sommeNoteDuration, rectY)
                             .id(sommeNoteDuration);
 
