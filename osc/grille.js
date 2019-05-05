@@ -410,4 +410,14 @@ function run(partition, durationArray) {
     }).id('timeLine')
 
     scrollTo(0, document.getElementById("F#5").getAttribute("y"))
+
+}
+
+function pause() {
+    socket.emit('pause')
+}
+
+
+function resume() {
+    socket.emit('resume')
 }
