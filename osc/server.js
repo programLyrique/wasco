@@ -125,10 +125,10 @@ io.sockets.on('connection', function (socket) {
             args: [
                 {
                     type: "s",
-                    value: "playfrombeat"
+                    value: "startfrombeat"
                 },
                 {
-                    type: "s",
+                    type: "f",
                     value: lastbeat_pos
                 },
             ]
@@ -163,15 +163,16 @@ io.sockets.on('connection', function (socket) {
                 ]
             }, "127.0.0.1", 5678);
 
-            // udpPort.send({
-            //     address: "/antescofo/cmd",
-            //     args: [
-            //         {
-            //             type: "s",
-            //             value: "get_current_score"
-            //         }
-            //     ]
-            // }, "127.0.0.1", 5678);
+            udpPort.send({
+                address: "/antescofo/cmd",
+                args: [
+                    {
+                        type: "s",
+                        value: "get_current_score"
+                    }
+                ]
+            }, "127.0.0.1", 5678);
+
         }
     });
 });
@@ -204,7 +205,7 @@ udpPort.on("message", function (msg) {
         }
         console.log(msg)
         lastbeat_pos = message.args[0].value;
-        //}   
+        //}
     }
 
 });
