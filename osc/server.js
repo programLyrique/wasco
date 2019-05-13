@@ -94,7 +94,7 @@ var io = require('socket.io').listen(server);
 var sock;
 io.sockets.on('connection', function (socket) {
     sock = socket;
-
+    msgOsc = false;
     socket.on('pause', () => {
         console.log('pause');
 
